@@ -91,6 +91,8 @@ void LedMatrix::ledTask()
 void LedMatrix::setPixel(int x, int y, bool state)
 {
 	int tmp;
+	int xBound = this->cpin_count;
+	int yBound = this->apin_count;
 
 	// Transform the pixel location based on current rotation mode
 	switch( this->mode )
@@ -103,6 +105,8 @@ void LedMatrix::setPixel(int x, int y, bool state)
 			tmp = y;
 			y = x;
 			x = this->apin_count - 1 - tmp;
+			xBound = this->apin_count;
+			yBound = this->cpin_count;
 			break;
 		case LED_MATRIX_180DEG:
 			// Flip x,y
@@ -114,11 +118,13 @@ void LedMatrix::setPixel(int x, int y, bool state)
 			tmp = y;
 			y = this->cpin_count - 1 - x;
 			x = tmp;
+			xBound = this->apin_count;
+			yBound = this->cpin_count;
 			break;
 	}
 
 	// Check bounds of transformed pixel location
-	if( x >= 0 && x <= this->cpin_count && y >= 0 && y <= this->apin_count )
+	if( x >= 0 && x <= xBound && y >= 0 && y <= yBound )
 	{
 		this->state[y][x] = state;
 	}
